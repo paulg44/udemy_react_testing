@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { render, screen } from "@testing-library/react";
 
 function ColorList() {
@@ -56,4 +57,46 @@ test("getAllBy, queryAllBy, findAllBy", async () => {
   expect(screen.getAllByRole("listitem")).toHaveLength(3);
   expect(screen.queryAllByRole("listitem")).toHaveLength(3);
   expect(await screen.findAllByRole("listitem")).toHaveLength(3);
+});
+
+test("favor using getBy to prove an element exists", () => {
+  render(<ColorList />);
+
+  const element = screen.getByRole("list");
+
+  expect(element).toBeInTheDocument();
+});
+
+test("favor queryBy when proving an element does not exist", () => {
+  render(<ColorList />);
+
+  const element = screen.queryByRole("textbox");
+
+  expect(element).not.toBeInTheDocument();
+});
+
+function fakeFetchColors() {
+  return Promise.resolve(["red", "green", "blue"]);
+}
+
+function LoadableColorList() {
+  const [colors, setColors] = useState([]);
+
+  useEffect(() => {
+    fakeFetchColors().then((c) => setColors(c));
+  }, []);
+
+  const renderedColors = colors.map((color) => {
+    return <li key={color}>{color}</li>;
+  });
+
+  return <ul>{renderedColors}</ul>;
+}
+
+test("favor findBy or findAllBy when data fetching", async () => {
+  render(<LoadableColorList />);
+
+  const els = await screen.findAllByRole("listitem");
+
+  expect(els).toHaveLength(3);
 });
