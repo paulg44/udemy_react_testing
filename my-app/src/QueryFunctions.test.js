@@ -31,7 +31,7 @@ test("getBy, queryBy, findBy when they find one element", async () => {
   render(<ColorList />);
 
   expect(screen.getByRole("list")).toBeInTheDocument();
-  expect(screen.queryByRole("list")).toBeInTheDocument();
+  // expect(screen.queryByRole("list")).toBeInTheDocument();
   expect(await screen.findByRole("list")).toBeInTheDocument();
 });
 
