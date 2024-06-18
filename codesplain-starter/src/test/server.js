@@ -12,7 +12,6 @@ export function createServer(handlerConfig) {
 
   beforeAll(() => {
     server.listen();
-    console.log("A server is listening");
   });
 
   afterEach(() => {
@@ -21,6 +20,5 @@ export function createServer(handlerConfig) {
 
   afterAll(() => {
     server.close();
-    console.log("A server is closed");
   });
 }
